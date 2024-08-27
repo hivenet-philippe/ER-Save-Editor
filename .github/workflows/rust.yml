@@ -1,0 +1,35 @@
+name: Rust
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Build project
+        run: cargo build --release
+
+      - name: Package binaries
+        run: |
+          mkdir -p dist
+          cp target/release/Er-Save-Editor.exe dist/
+        shell: bash
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: dist/Er-Save-Editor.exe
+          asset_name: Er-Save-Editor.exe
+          asset_content_type: application/octet-stream
