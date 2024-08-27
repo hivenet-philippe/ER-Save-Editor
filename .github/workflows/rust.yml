@@ -20,16 +20,9 @@ jobs:
       - name: Build project
         run: cargo build --release
 
-      - name: Package binaries
-        run: |
-          mkdir -p dist
-          cp target/release/Er-Save-Editor.exe dist/
-        shell: bash
-
-      - name: Upload Release Asset
-        uses: actions/upload-release-asset@v1
+      - name: store exe on job
+        uses: actions/upload-artifact@v2
         with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: dist/Er-Save-Editor.exe
-          asset_name: Er-Save-Editor.exe
-          asset_content_type: application/octet-stream
+          name: Er-Save-Editor.exe
+          path: target/release/
+          retention-days: 2
